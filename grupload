@@ -12,17 +12,21 @@ AWS_LINK_RE = compile(r'<a href="http://www.amazon.com/exec/obidos/ASIN/(?P<asin
 GR_KEY = 'S7U07cOT8tvGRroS25BicQ'
 GR_SECRET = 'KO2F81nBvsd2zLTCIdUfszHvccGCbPXmNXgl3k3jYw'
 
+GR_ASIN_TO_ID_URL = 'https://www.goodreads.com/book/isbn_to_id'
+
 
 class Book(object):
 
     def __init__(self, post):
         self._post = post
         match = AWS_LINK_RE.match(post['post_content'])
-        if match is None:
-            import ipdb ; ipdb.set_trace()
         self.asin = match.group('asin')
         self.review = match.group('review')
 
+    def get_goodreads_id(self):
+        response = get(GR_ASIN_TO_ID_URL,
+                       params={'key': GR_KEY, 'isbn': self.asin})
+        return response.text
 
 
 def get_books():
@@ -37,7 +41,7 @@ def get_books():
 
 def main():
     book = get_books()[0]
-    print book.asin, book.review
+    print book.asin, book.review, book.get_goodreads_id()
 
 
 if __name__ == '__main__':
