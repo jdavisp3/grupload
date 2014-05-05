@@ -7,7 +7,7 @@ from re import compile
 
 LOADING_DIR = 'loading'
 
-AWS_LINK_RE = compile(r'<a href="http://www.amazon.com/exec/obidos/ASIN/(?P<asin>\d+)/krondonet-20"><img src="[^"]*" /></a>')
+AWS_LINK_RE = compile(r'<a href="http://www.amazon.com/exec/obidos/ASIN/(?P<asin>\d+)/krondonet-20"><img src="[^"]*" /></a>(?P<review>.*)')
 
 GR_KEY = 'S7U07cOT8tvGRroS25BicQ'
 GR_SECRET = 'KO2F81nBvsd2zLTCIdUfszHvccGCbPXmNXgl3k3jYw'
@@ -17,6 +17,11 @@ class Book(object):
 
     def __init__(self, post):
         self._post = post
+        match = AWS_LINK_RE.match(post['post_content'])
+        self.asin = match.group('asin')
+        self.review = match.group('review')
+
+
 
 def get_books():
     with open('wp_posts.json') as f:
@@ -26,7 +31,8 @@ def get_books():
 
 
 def main():
-    print get_books()[0]
+    book = get_books()[0]
+    print book.asin, book.review
 
 
 if __name__ == '__main__':
