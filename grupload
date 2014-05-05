@@ -5,6 +5,8 @@ from os import listdir
 from os.path import join
 from re import compile
 
+from requests import get
+
 LOADING_DIR = 'loading'
 
 AWS_LINK_RE = compile(r'<a href="http://www.amazon.com/exec/obidos/ASIN/(?P<asin>[^"]+)/krondonet-20">.*?</a>(?P<review>.*)')
