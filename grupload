@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+from json import load
+from os import listdir
+from os.path import join
+
+LOADING_DIR = 'loading'
+
+
+def get_books():
+    with open('wp_posts.json') as f:
+        posts = load(f)
+    return posts
+
+
+def main():
+    print get_books()
+
+
+if __name__ == '__main__':
+    main()
