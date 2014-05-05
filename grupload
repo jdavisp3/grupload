@@ -7,7 +7,7 @@ from re import compile
 
 LOADING_DIR = 'loading'
 
-AWS_LINK_RE = compile(r'<a href="http://www.amazon.com/exec/obidos/ASIN/(?P<asin>\d+)/krondonet-20"><img src="[^"]*" /></a>(?P<review>.*)')
+AWS_LINK_RE = compile(r'<a href="http://www.amazon.com/exec/obidos/ASIN/(?P<asin>[^"]+)/krondonet-20"><img .*? /></a>(?P<review>.*)')
 
 GR_KEY = 'S7U07cOT8tvGRroS25BicQ'
 GR_SECRET = 'KO2F81nBvsd2zLTCIdUfszHvccGCbPXmNXgl3k3jYw'
@@ -18,6 +18,8 @@ class Book(object):
     def __init__(self, post):
         self._post = post
         match = AWS_LINK_RE.match(post['post_content'])
+        if match is None:
+            import ipdb ; ipdb.set_trace()
         self.asin = match.group('asin')
         self.review = match.group('review')
 
