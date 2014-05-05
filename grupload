@@ -27,7 +27,10 @@ def get_books():
     with open('wp_posts.json') as f:
         posts = load(f)
 
-    return [post for post in posts if post['post_title'].startswith('Book:')]
+    return [
+        Book(post) for post in posts
+        if post['post_title'].startswith('Book:')
+    ]
 
 
 def main():
