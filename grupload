@@ -2,6 +2,7 @@
 
 from json import load
 from os import listdir
+from os.path import exists
 from os.path import join
 from re import compile
 from subprocess import PIPE
@@ -100,11 +101,18 @@ def get_session():
     return goodreads.get_auth_session(request_token, request_token_secret)
 
 
+def make_review(book, session):
+    done_file = join('done', book.asin)
+
+    if exists(done_file):
+        return
+
+    book.create_review(session)
+    import ipdb ; ipdb.set_trace()
+
+
 def main():
     session = get_session()
-
-    print session.access_token
-    print session.access_token_secret
 
     book = get_books()[0]
 
