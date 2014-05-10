@@ -68,7 +68,7 @@ def get_books():
     ]
 
 
-def get_connection():
+def get_session():
     goodreads = OAuth1Service(
         consumer_key=GR_KEY,
         consumer_secret=GR_SECRET,
@@ -81,8 +81,18 @@ def get_connection():
 
     request_token, request_token_secret = goodreads.get_request_token(header_auth=True)
 
+    authorize_url = goodreads.get_authorize_url(request_token)
+    print 'Go: ' + authorize_url
+    accepted = ''
+    while accepted.lower() != 'y':
+        accepted = raw_input('Have you authorized me? (y/n) ')
+
+    return goodreads.get_auth_session(request_token, request_token_secret)
+
 
 def main():
+    session = get_session()
+
     book = get_books()[0]
     import ipdb ; ipdb.set_trace()
 
