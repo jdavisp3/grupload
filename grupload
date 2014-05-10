@@ -18,6 +18,9 @@ AWS_LINK_RE = compile(r'<a href="http://www.amazon.com/exec/obidos/ASIN/(?P<asin
 GR_KEY = 'S7U07cOT8tvGRroS25BicQ'
 GR_SECRET = 'KO2F81nBvsd2zLTCIdUfszHvccGCbPXmNXgl3k3jYw'
 
+GR_ACCESS_TOKEN = 'CXv6Op93UohDO8weGed2Kw'
+GR_ACCESS_TOKEN_SECRET = 'CxeqeXXVV1sVjUruWK0oLcokDhm2X1SVfKKnBlg4Vw'
+
 GR_ASIN_TO_ID_URL = 'https://www.goodreads.com/book/isbn_to_id'
 GR_CREATE_REVIEW_URL = 'https://www.goodreads.com/review.xml'
 
@@ -69,6 +72,13 @@ def get_books():
 
 
 def get_session():
+    return OAuth1Session(
+        consumer_key=GR_KEY,
+        consumer_secret=GR_SECRET,
+        access_token=GR_ACCESS_TOKEN,
+        access_token_secret=GR_ACCESS_TOKEN_SECRET,
+    )
+
     goodreads = OAuth1Service(
         consumer_key=GR_KEY,
         consumer_secret=GR_SECRET,
@@ -93,8 +103,10 @@ def get_session():
 def main():
     session = get_session()
 
+    print session.access_token
+    print session.access_token_secret
+
     book = get_books()[0]
-    import ipdb ; ipdb.set_trace()
 
     print book.asin, book.get_review_text(), book.get_goodreads_id()
 
