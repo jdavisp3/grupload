@@ -116,7 +116,7 @@ def main():
 
     book = get_books()[0]
 
-    print book.asin, book.get_review_text(), book.get_goodreads_id()
+    make_review(book)
 
 
 if __name__ == '__main__':
