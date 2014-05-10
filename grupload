@@ -116,9 +116,10 @@ def make_review(book, session):
 
 
 def main():
+    books = get_books()
     session = get_session()
 
-    for count, book in enumerate(get_books(), 1):
+    for count, book in enumerate(books, 1):
         print 'Posting review {}/{}'.format(count, len(books))
         make_review(book, session)
 
