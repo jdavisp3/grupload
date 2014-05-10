@@ -49,6 +49,8 @@ class Book(object):
             'review[review]': self.get_review_text(),
             'shelf': 'read',
         }
+        response = session.post(GR_CREATE_REVIEW_URL, data=review)
+        return return.text
 
 
 def html2text(html):
@@ -107,7 +109,11 @@ def make_review(book, session):
     if exists(done_file):
         return
 
-    book.create_review(session)
+    result = book.create_review(session)
+
+    with open(done_file, 'w') as f:
+        f.write(result)
+
     import ipdb ; ipdb.set_trace()
 
 
