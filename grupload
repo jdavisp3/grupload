@@ -114,8 +114,6 @@ def make_review(book, session):
     with open(done_file, 'w') as f:
         f.write(result)
 
-    import ipdb ; ipdb.set_trace()
-
 
 def main():
     session = get_session()
