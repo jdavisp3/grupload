@@ -50,7 +50,7 @@ class Book(object):
             'shelf': 'read',
         }
         response = session.post(GR_CREATE_REVIEW_URL, data=review)
-        return return.text
+        return return response.text
 
 
 def html2text(html):
