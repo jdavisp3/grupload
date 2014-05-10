@@ -50,7 +50,7 @@ class Book(object):
             'shelf': 'read',
         }
         response = session.post(GR_CREATE_REVIEW_URL, data=review)
-        return return response.text
+        return response.text
 
 
 def html2text(html):
@@ -120,9 +120,11 @@ def make_review(book, session):
 def main():
     session = get_session()
 
-    book = get_books()[0]
+    books = get_books()[:2]
 
-    make_review(book, session)
+    for count, book in enumerate(books, 1):
+        print 'Posting review {}/{}'.format(count, len(books))
+        make_review(book, session)
 
 
 if __name__ == '__main__':
