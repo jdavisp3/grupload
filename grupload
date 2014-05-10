@@ -33,7 +33,7 @@ class Book(object):
         self._post = post
         match = AWS_LINK_RE.match(post['post_content'])
         self.asin = match.group('asin')
-        self.review = match.group('review')
+        self.review = match.group('review').replace('\r', '')
 
     def get_goodreads_id(self):
         response = get(GR_ASIN_TO_ID_URL,
