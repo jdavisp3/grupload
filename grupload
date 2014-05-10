@@ -18,6 +18,7 @@ GR_KEY = 'S7U07cOT8tvGRroS25BicQ'
 GR_SECRET = 'KO2F81nBvsd2zLTCIdUfszHvccGCbPXmNXgl3k3jYw'
 
 GR_ASIN_TO_ID_URL = 'https://www.goodreads.com/book/isbn_to_id'
+GR_CREATE_REVIEW_URL = 'https://www.goodreads.com/review.xml'
 
 
 class Book(object):
@@ -35,6 +36,14 @@ class Book(object):
 
     def get_review_text(self):
         return html2text(self.review)
+
+    def create_review(self):
+        review = {
+            'book_id': self.get_goodreads_id(),
+            'review[read_at]': self._post['post_date'].split()[0],
+            'review[review]': self.get_review_text(),
+            'shelf': 'read',
+        }
 
 
 def html2text(html):
@@ -60,6 +69,8 @@ def get_books():
 
 def main():
     book = get_books()[0]
+    import ipdb ; ipdb.set_trace()
+
     print book.asin, book.get_review_text(), book.get_goodreads_id()
 
 
