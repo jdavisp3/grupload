@@ -103,7 +103,7 @@ def make_review(book, session):
 
 
 def main():
-    books = get_books()[:15]
+    books = get_books()
     session = get_session()
 
     for count, book in enumerate(books, 1):
