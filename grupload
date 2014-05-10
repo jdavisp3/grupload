@@ -40,14 +40,13 @@ class Book(object):
         return response.text
 
     def get_review_text(self):
-        text = html2text(self.review)
-        return text.replace('_\x08', '')
+        return html2text(self.review)
 
     def create_review(self, session):
         review = {
             'book_id': self.get_goodreads_id(),
             'review[read_at]': self._post['post_date'].split()[0],
-            'review[review]': self.get_review_text(),
+            'review[review]': self.review,
             'shelf': 'read',
         }
         response = session.post(GR_CREATE_REVIEW_URL, data=review)
@@ -58,8 +57,7 @@ def html2text(html):
     with NamedTemporaryFile() as tempfile:
         tempfile.write(html)
         tempfile.flush()
-        url = 'file:///{}'.format(tempfile.name)
-        cmd = ['html2text', url, '-style', 'pretty']
+        cmd = ['python', '-m', 'html2text', tempfile.name]
         p = Popen(cmd, stdout=PIPE)
         out, _ = p.communicate()
         assert p.returncode == 0
