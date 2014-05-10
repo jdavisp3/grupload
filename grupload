@@ -40,9 +40,6 @@ class Book(object):
                        params={'key': GR_KEY, 'isbn': self.asin})
         return response.text
 
-    def get_review_text(self):
-        return html2text(self.review)
-
     def create_review(self, session):
         review = {
             'book_id': self.get_goodreads_id(),
@@ -52,17 +49,6 @@ class Book(object):
         }
         response = session.post(GR_CREATE_REVIEW_URL, data=review)
         return response.text
-
-
-def html2text(html):
-    with NamedTemporaryFile() as tempfile:
-        tempfile.write(html)
-        tempfile.flush()
-        cmd = ['python', '-m', 'html2text', tempfile.name]
-        p = Popen(cmd, stdout=PIPE)
-        out, _ = p.communicate()
-        assert p.returncode == 0
-        return out
 
 
 def get_books():
