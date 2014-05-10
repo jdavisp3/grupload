@@ -40,7 +40,8 @@ class Book(object):
         return response.text
 
     def get_review_text(self):
-        return html2text(self.review)
+        text = html2text(self.review)
+        return text.replace('_\x08', '')
 
     def create_review(self, session):
         review = {
@@ -57,7 +58,8 @@ def html2text(html):
     with NamedTemporaryFile() as tempfile:
         tempfile.write(html)
         tempfile.flush()
-        cmd = ['html2text', 'file:///{}'.format(tempfile.name)]
+        url = 'file:///{}'.format(tempfile.name)
+        cmd = ['html2text', url, '-style', 'pretty']
         p = Popen(cmd, stdout=PIPE)
         out, _ = p.communicate()
         assert p.returncode == 0
