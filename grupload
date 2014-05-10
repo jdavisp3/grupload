@@ -16,11 +16,12 @@ LOADING_DIR = 'loading'
 
 AWS_LINK_RE = compile(r'<a href="http://www.amazon.com/exec/obidos/ASIN/(?P<asin>[^"]+)/krondonet-20">.*?</a>(?P<review>.*)')
 
-GR_KEY = 'S7U07cOT8tvGRroS25BicQ'
-GR_SECRET = 'KO2F81nBvsd2zLTCIdUfszHvccGCbPXmNXgl3k3jYw'
-
-GR_ACCESS_TOKEN = 'CXv6Op93UohDO8weGed2Kw'
-GR_ACCESS_TOKEN_SECRET = 'CxeqeXXVV1sVjUruWK0oLcokDhm2X1SVfKKnBlg4Vw'
+with open('.keys') as keyfile:
+    keys = dict(line.strip().split() for line in keyfile if line.strip())
+    GR_KEY = keys['GR_KEY']
+    GR_SECRET = keys['GR_SECRET']
+    GR_ACCESS_TOKEN = keys['GR_ACCESS_TOKEN']
+    GR_ACCESS_TOKEN_SECRET = keys['GR_ACCESS_TOKEN_SECRET']
 
 GR_ASIN_TO_ID_URL = 'https://www.goodreads.com/book/isbn_to_id'
 GR_CREATE_REVIEW_URL = 'https://www.goodreads.com/review.xml'
