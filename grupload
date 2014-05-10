@@ -42,7 +42,7 @@ class Book(object):
     def get_review_text(self):
         return html2text(self.review)
 
-    def create_review(self):
+    def create_review(self, session):
         review = {
             'book_id': self.get_goodreads_id(),
             'review[read_at]': self._post['post_date'].split()[0],
@@ -116,7 +116,7 @@ def main():
 
     book = get_books()[0]
 
-    make_review(book)
+    make_review(book, session)
 
 
 if __name__ == '__main__':
