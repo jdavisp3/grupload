@@ -1,14 +1,10 @@
 #!/usr/bin/env python
 
 from json import load
-from os import listdir
 from os.path import exists
 from os.path import join
 from re import compile
 from re import DOTALL
-from subprocess import PIPE
-from subprocess import Popen
-from tempfile import NamedTemporaryFile
 
 from BeautifulSoup import BeautifulStoneSoup
 from rauth.service import OAuth1Service, OAuth1Session
@@ -27,7 +23,7 @@ with open('.keys') as keyfile:
 
 GR_ASIN_TO_ID_URL = 'https://www.goodreads.com/book/isbn_to_id'
 GR_CREATE_REVIEW_URL = 'https://www.goodreads.com/review.xml'
-GR_EDIT_REVIEW_URL = 'https://www.goodreads.com/review.xml?id={review_id}'
+GR_EDIT_REVIEW_URL = 'https://www.goodreads.com/review/{book_id}.xml'
 
 
 class Book(object):
@@ -53,12 +49,11 @@ class Book(object):
         response = session.post(GR_CREATE_REVIEW_URL, data=review)
         return response.text
 
-    def update_review(self, session, review_id):
+    def update_review(self, session):
         review = {
-            'id': review_id,
             'review[review]': self.review,
         }
-        url = GR_EDIT_REVIEW_URL.format(review_id=review_id)
+        url = GR_EDIT_REVIEW_URL.format(book_id=self.get_goodreads_id())
         response = session.post(url, data=review)
         return response.text
 
@@ -112,16 +107,13 @@ def update_review(book, session, done_file):
     if not soup.review:
         return
 
-    review_id = soup.review.id.text
-
     review_elements = soup.findChildren('review')
     posted_review = review_elements[1].text.strip()
 
     if posted_review:
         return
 
-    print 'Updating review:', review_id
-    result = book.update_review(session, review_id)
+    result = book.update_review(session)
 
     import ipdb ; ipdb.set_trace()
 
