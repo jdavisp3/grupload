@@ -23,7 +23,7 @@ with open('.keys') as keyfile:
 
 GR_ASIN_TO_ID_URL = 'https://www.goodreads.com/book/isbn_to_id'
 GR_CREATE_REVIEW_URL = 'https://www.goodreads.com/review.xml'
-GR_EDIT_REVIEW_URL = 'https://www.goodreads.com/review/{book_id}.xml'
+GR_EDIT_REVIEW_URL = 'https://www.goodreads.com/review/{review_id}.xml'
 
 
 class Book(object):
@@ -49,12 +49,13 @@ class Book(object):
         response = session.post(GR_CREATE_REVIEW_URL, data=review)
         return response.text
 
-    def update_review(self, session):
+    def update_review(self, session, review_id):
         review = {
             'review[review]': self.review,
         }
-        url = GR_EDIT_REVIEW_URL.format(book_id=self.get_goodreads_id())
+        url = GR_EDIT_REVIEW_URL.format(review_id=review_id)
         response = session.post(url, data=review)
+        import ipdb ; ipdb.set_trace()
         return response.text
 
 
@@ -107,13 +108,14 @@ def update_review(book, session, done_file):
     if not soup.review:
         return
 
+    review_id = soup.review.id.text
     review_elements = soup.findChildren('review')
     posted_review = review_elements[1].text.strip()
 
     if posted_review:
         return
 
-    result = book.update_review(session)
+    result = book.update_review(session, review_id)
 
     import ipdb ; ipdb.set_trace()
 
