@@ -103,6 +103,9 @@ def get_session():
 
 
 def update_review(book, session, done_file):
+    if not book.review:
+        return
+
     with open(done_file) as f:
         soup = BeautifulStoneSoup(f)
 
@@ -111,11 +114,10 @@ def update_review(book, session, done_file):
 
     review_id = soup.review.id.text
 
-    posted_review = soup.review.review
-    posted_review = posted_review.text.strip() if posted_review else ''
-    review = book.review.strip()
+    review_elements = soup.findChildren('review')
+    posted_review = review_elements[1].text.strip()
 
-    if posted_review or not review:
+    if posted_review:
         return
 
     print 'Updating review:', review_id
