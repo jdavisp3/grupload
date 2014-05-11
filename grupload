@@ -129,7 +129,7 @@ def make_review(book, session):
         return
 
     with open(done_file, 'w') as f:
-        f.write(result)
+        f.write(result.encode('utf-8'))
 
 
 def main():
