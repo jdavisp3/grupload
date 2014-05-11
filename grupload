@@ -36,7 +36,7 @@ class Book(object):
         self._post = post
         match = AWS_LINK_RE.match(post['post_content'])
         self.asin = match.group('asin')
-        self.review = match.group('review')
+        self.review = match.group('review').strip()
 
     def get_goodreads_id(self):
         response = get(GR_ASIN_TO_ID_URL,
@@ -51,6 +51,14 @@ class Book(object):
             'shelf': 'read',
         }
         response = session.post(GR_CREATE_REVIEW_URL, data=review)
+        return response.text
+
+    def update_review(self, session, review_id):
+        review = {
+            'review[review]': self.review,
+        }
+        url = GR_EDIT_REVIEW_URL.format(review_id)
+        response = session.post(url, data=review)
         return response.text
 
 
@@ -110,6 +118,7 @@ def update_review(book, session, done_file):
         return
 
     print 'Updating review:', review_id
+    book.update_review(session, review_id)
 
     import ipdb ; ipdb.set_trace()
 
