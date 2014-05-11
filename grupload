@@ -134,8 +134,10 @@ def make_review(book, session):
     else:
         result = book.create_review(session)
 
+    if not result:
+        return
+
     import ipdb ; ipdb.set_trace()
-    return
 
     with open(done_file, 'w') as f:
         f.write(result)
