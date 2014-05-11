@@ -55,6 +55,7 @@ class Book(object):
 
     def update_review(self, session, review_id):
         review = {
+            'id': review_id,
             'review[review]': self.review,
         }
         url = GR_EDIT_REVIEW_URL.format(review_id=review_id)
