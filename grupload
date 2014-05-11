@@ -10,6 +10,7 @@ from subprocess import PIPE
 from subprocess import Popen
 from tempfile import NamedTemporaryFile
 
+from BeautifulSoup import BeautifulStoneSoup
 from rauth.service import OAuth1Service, OAuth1Session
 from requests import get
 
@@ -26,6 +27,7 @@ with open('.keys') as keyfile:
 
 GR_ASIN_TO_ID_URL = 'https://www.goodreads.com/book/isbn_to_id'
 GR_CREATE_REVIEW_URL = 'https://www.goodreads.com/review.xml'
+GR_EDIT_REVIEW_URL = 'https://www.goodreads.com/review.xml?id={review_id}'
 
 
 class Book(object):
@@ -91,13 +93,37 @@ def get_session():
     return goodreads.get_auth_session(request_token, request_token_secret)
 
 
+def update_review(book, session, done_file):
+    with open(done_file) as f:
+        soup = BeautifulStoneSoup(f)
+
+    if not soup.review:
+        return
+
+    review_id = soup.review.id.text
+
+    posted_review = soup.review.review
+    posted_review = posted_review.text.strip() if posted_review else ''
+    review = book.review.strip()
+
+    if posted_review or not review:
+        return
+
+    print 'Updating review:', review_id
+
+    import ipdb ; ipdb.set_trace()
+
+
 def make_review(book, session):
     done_file = join('done', book.asin)
 
     if exists(done_file):
-        return
+        result = update_review(book, session, done_file)
+    else:
+        result = book.create_review(session)
 
-    result = book.create_review(session)
+    import ipdb ; ipdb.set_trace()
+    return
 
     with open(done_file, 'w') as f:
         f.write(result)
