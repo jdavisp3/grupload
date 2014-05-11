@@ -141,11 +141,9 @@ def make_review(book, session):
 def main():
     books = get_books()
     session = get_session()
-    import ipdb ; ipdb.set_trace()
-
 
     for count, book in enumerate(books, 1):
-        print 'Posting review {}/{}'.format(count, len(books))
+        print 'Processing review {}/{}'.format(count, len(books))
         make_review(book, session)
 
 
