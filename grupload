@@ -57,7 +57,7 @@ class Book(object):
         review = {
             'review[review]': self.review,
         }
-        url = GR_EDIT_REVIEW_URL.format(review_id)
+        url = GR_EDIT_REVIEW_URL.format(review_id=review_id)
         response = session.post(url, data=review)
         return response.text
 
@@ -118,7 +118,7 @@ def update_review(book, session, done_file):
         return
 
     print 'Updating review:', review_id
-    book.update_review(session, review_id)
+    result = book.update_review(session, review_id)
 
     import ipdb ; ipdb.set_trace()
 
