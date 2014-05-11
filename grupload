@@ -51,6 +51,8 @@ class Book(object):
             'shelf': 'read',
         }
         response = session.post(GR_CREATE_REVIEW_URL, data=review)
+        import ipdb ; ipdb.set_trace()
+
         return response.text
 
     def update_review(self, session, review_id):
