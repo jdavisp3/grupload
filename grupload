@@ -5,6 +5,7 @@ from os import listdir
 from os.path import exists
 from os.path import join
 from re import compile
+from re import DOTALL
 from subprocess import PIPE
 from subprocess import Popen
 from tempfile import NamedTemporaryFile
@@ -14,7 +15,7 @@ from requests import get
 
 LOADING_DIR = 'loading'
 
-AWS_LINK_RE = compile(r'<a href="http://www.amazon.com/exec/obidos/ASIN/(?P<asin>[^"]+)/krondonet-20">.*?</a>(?P<review>.*)')
+AWS_LINK_RE = compile(r'<a href="http://www.amazon.com/exec/obidos/ASIN/(?P<asin>[^"]+)/krondonet-20">.*?</a>(?P<review>.*)', flags=DOTALL)
 
 with open('.keys') as keyfile:
     keys = dict(line.strip().split() for line in keyfile if line.strip())
@@ -105,6 +106,8 @@ def make_review(book, session):
 def main():
     books = get_books()
     session = get_session()
+    import ipdb ; ipdb.set_trace()
+
 
     for count, book in enumerate(books, 1):
         print 'Posting review {}/{}'.format(count, len(books))
